@@ -1,6 +1,6 @@
 const socksAgent = require('./agent');
+const token = require('./token');
 
-token = 'token';
 
 options = {
     telegram: {

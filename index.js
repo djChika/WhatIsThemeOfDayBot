@@ -5,11 +5,16 @@ const bot = new Telegraf(settings.token, settings.options);
 
 bot.start((ctx => ctx.reply('Welcome')));
 
-bot.command('modern', ({reply}) => reply('Yo'));
-
-bot.hears('hi', ctx => {
-    return ctx.reply('Hey!');
+bot.command('title', ctx => {
+    ctx.getChat().then(
+        chat => {
+            ctx.telegram.setChatTitle(chat.id, "NewTitleOfChat")
+        }
+    )
 });
 
+bot.command('chatid', ctx => {
+    ctx.getChat().then(chat => console.log(chat.id));
+});
 
 bot.startPolling();
