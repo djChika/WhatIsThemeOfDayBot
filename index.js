@@ -14,6 +14,10 @@ bot.command('title', ctx => {
     )
 });
 
+bot.telegram.getMe().then(botinfo => {
+    bot.options.username = botinfo.username
+});
+
 bot.command('chatid', ctx => {
     ctx.getChat().then(chat => console.log(chat.id));
 });
