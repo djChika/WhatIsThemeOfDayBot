@@ -1,4 +1,4 @@
-const socksAgent = require('./agent');
+const socksAgent = require('./proxy/agent');
 const token = require('./token');
 
 

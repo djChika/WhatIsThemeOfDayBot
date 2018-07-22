@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf');
-const settings = require('./settings');
-const axios = require('axios');
+const settings = require('./config/settings');
+const Dvach = require('./news/2ch');
 
 const bot = new Telegraf(settings.token, settings.options);
 
@@ -19,25 +19,27 @@ bot.command('chatid', ctx => {
 });
 
 
+function send_news(ctx, subject, picture, link) {
+    ctx.reply(subject);
+    ctx.replyWithPhoto(picture);
+    ctx.reply('Подробнее: ' + link);
+
+    //console.log('Subject: ' + subject);
+    //console.log('photo: ' + photo);
+    //console.log('link: ' + link);
+}
+
 bot.command('news', ctx => {
-    url = 'https://2ch.hk/news/catalog.json';
-    axios.get(url).then(response => {
-        base_url = 'https://2ch.hk';
-        post_base_url = 'https://2ch.hk/news/res/';
+    Dvach.request_news().then(function (response) {
+        let news = Dvach.parse_news(response.data);
+        send_news(ctx, news.subject, news.picture, news.link);
 
-        let news = response.data.threads[Math.floor(Math.random() * 5) + 2];
-
-        let subject = news['subject'];
-        let comment = news['comment'];
-        let picture = base_url + news['files'][0]['path'];
-        let post_url = post_base_url + news['num'] + '.html';
-
-        ctx.reply(subject);
-        ctx.replyWithPhoto(picture);
-        ctx.reply('Подробнее: ' + post_url)
-    }).catch(error => {
-        console.log(error);
+        //TODO
+        ctx.getChat().then(chat => {
+            ctx.telegram.setChatTitle(chat.id, news.subject);
+        });
     });
 });
+
 
 bot.startPolling();
