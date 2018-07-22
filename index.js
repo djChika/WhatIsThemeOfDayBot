@@ -2,6 +2,7 @@ const Telegraf = require('telegraf');
 const settings = require('./config/settings');
 const messages = require('./services/messages');
 const chatManager = require('./services/chatManager');
+
 const Dvach = require('./news/2ch');
 
 const bot = new Telegraf(settings.token, settings.options);
@@ -30,7 +31,7 @@ bot.command('news', ctx => {
     Dvach.request_news().then(function (response) {
         let news = Dvach.parse_news(response.data);
         messages.send_news(ctx, news.subject, news.picture, news.link);
-        chatManager.setTitle(ctx, news.subject);
+        chatManager.set_title(ctx, news.subject);
     });
 });
 

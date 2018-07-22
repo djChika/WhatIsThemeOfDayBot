@@ -1,8 +1,8 @@
-function setTitle(ctx, newTitle) {
+function set_title(ctx, newTitle) {
     //TODO
     ctx.getChat().then(chat => {
         ctx.telegram.setChatTitle(chat.id, newTitle);
     });
 }
 
-module.exports = {setTitle};
+module.exports = {set_title};
